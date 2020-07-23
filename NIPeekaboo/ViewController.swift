@@ -55,7 +55,7 @@ class ViewController: UIViewController, NISessionDelegate {
         offerLabel.text = "Complimentary Lounge Access to Visa Cardholders"
         offerImage.image = UIImage(named: "lounge")
         
-        applyMerchantModeSettings()
+//        applyMerchantModeSettings()
         
         // Start the NISessions
         startup()
@@ -63,6 +63,8 @@ class ViewController: UIViewController, NISessionDelegate {
     
     func applyMerchantModeSettings() {
         myPeerName = "Hotel Visa"
+        offerImage.isHidden = true
+        offerLabel.isHidden = true
     }
 
     func startup() {
