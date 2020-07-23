@@ -27,7 +27,7 @@ class MPCSession: NSObject, MCSessionDelegate, MCNearbyServiceBrowserDelegate, M
     init(service: String, identity: String, maxPeers: Int, myPeerName: String) {
         serviceString = service
         identityString = identity
-        localPeerID = MCPeerID(displayName: myPeerName + " (" + UIDevice.current.name + ")")
+        localPeerID = MCPeerID(displayName: myPeerName)
         mcSession = MCSession(peer: localPeerID, securityIdentity: nil, encryptionPreference: .required)
         mcAdvertiser = MCNearbyServiceAdvertiser(peer: localPeerID,
                                                  discoveryInfo: [MPCSessionContants.kKeyIdentity: identityString],
