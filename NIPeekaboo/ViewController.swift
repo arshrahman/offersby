@@ -24,6 +24,7 @@ class ViewController: UIViewController, NISessionDelegate {
     @IBOutlet weak var detailRightArrow: UIImageView!
     @IBOutlet weak var detailUpArrow: UIImageView!
     @IBOutlet weak var detailAngleInfoView: UIView!
+    @IBOutlet weak var offerLabel: UILabel!
 
     // MARK: - Distance and direction state
     let nearbyDistanceThreshold: Float = 0.5 // meters
@@ -120,7 +121,7 @@ class ViewController: UIViewController, NISessionDelegate {
         }
 
         currentDistanceDirectionState = .unknown
-
+        offerLabel.text = ""
         switch reason {
         case .peerEnded:
             // Peer stopped communicating, this session is finished, invalidate.
@@ -219,7 +220,8 @@ class ViewController: UIViewController, NISessionDelegate {
         if (dataObject is NIDiscoveryToken) {
             peerDidShareDiscoveryToken(peer: peer, token: dataObject as! NIDiscoveryToken)
         } else if (dataObject is NSString) {
-            print("received data", dataObject)
+//            print("received data", dataObject)
+            offerLabel.text = dataObject as? String
         }
         
 //        guard let discoveryToken = try? NSKeyedUnarchiver.unarchivedObject(ofClass: NIDiscoveryToken.self, from: data) else {
