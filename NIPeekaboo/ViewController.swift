@@ -43,6 +43,7 @@ class ViewController: UIViewController, NISessionDelegate {
     var connectedPeer: MCPeerID?
     var sharedTokenWithPeer = false
     var peerDisplayName: String?
+    var myPeerName = "Custome-X"
 
     // MARK: - UI LifeCycle
     override func viewDidLoad() {
@@ -53,8 +54,15 @@ class ViewController: UIViewController, NISessionDelegate {
         detailContainer.alpha = 0.0
         offerLabel.text = "Complimentary Lounge Access to Visa Cardholders"
         offerImage.image = UIImage(named: "lounge")
+        
+        applyMerchantModeSettings()
+        
         // Start the NISessions
         startup()
+    }
+    
+    func applyMerchantModeSettings() {
+        myPeerName = "Hotel Visa"
     }
 
     func startup() {
@@ -175,9 +183,15 @@ class ViewController: UIViewController, NISessionDelegate {
         if mpc == nil {
             // Avoid any simulator instances from finding any actual devices.
             #if targetEnvironment(simulator)
-            mpc = MPCSession(service: "nisample", identity: "com.example.apple-samplecode.simulator.peekaboo-nearbyinteraction", maxPeers: 1)
+            mpc = MPCSession(service: "nisample",
+                             identity: "com.example.apple-samplecode.simulator.peekaboo-nearbyinteraction",
+                             maxPeers: 1,
+                             myPeerName: myPeerName)
             #else
-            mpc = MPCSession(service: "nisample", identity: "com.example.apple-samplecode.peekaboo-nearbyinteraction", maxPeers: 1)
+            mpc = MPCSession(service: "nisample",
+                             identity: "com.example.apple-samplecode.peekaboo-nearbyinteraction",
+                             maxPeers: 1,
+                             myPeerName: myPeerName)
             #endif
             mpc?.peerConnectedHandler = connectedToPeer
             mpc?.peerDataHandler = dataReceivedHandler

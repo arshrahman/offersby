@@ -18,15 +18,16 @@ class MPCSession: NSObject, MCSessionDelegate, MCNearbyServiceBrowserDelegate, M
     var peerDisconnectedHandler: ((MCPeerID) -> Void)?
     private var serviceString: String!
     private var mcSession: MCSession!
-    private let localPeerID = MCPeerID(displayName: UIDevice.current.name)
+    private var localPeerID: MCPeerID
     private var mcAdvertiser: MCNearbyServiceAdvertiser!
     private var mcBrowser: MCNearbyServiceBrowser!
     private var identityString: String!
     private var maxNumPeers: Int!
 
-    init(service: String, identity: String, maxPeers: Int) {
+    init(service: String, identity: String, maxPeers: Int, myPeerName: String) {
         serviceString = service
         identityString = identity
+        localPeerID = MCPeerID(displayName: myPeerName + " (" + UIDevice.current.name + ")")
         mcSession = MCSession(peer: localPeerID, securityIdentity: nil, encryptionPreference: .required)
         mcAdvertiser = MCNearbyServiceAdvertiser(peer: localPeerID,
                                                  discoveryInfo: [MPCSessionContants.kKeyIdentity: identityString],
