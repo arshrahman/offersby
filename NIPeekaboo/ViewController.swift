@@ -212,14 +212,23 @@ class ViewController: UIViewController, NISessionDelegate {
     }
 
     func dataReceivedHandler(data: Data, peer: MCPeerID) {
-        guard let dataObject = try? NSKeyedUnarchiver.unarchivedObject(ofClasses: [NIDiscoveryToken.self, NSString.self], from: data) else {
-            fatalError("Unexpectedly failed to decode dataObject.")
-        }
+//        guard let dataObject = try? NSKeyedUnarchiver.unarchivedObject(ofClasses: [NIDiscoveryToken.self, NSString.self, Offer.self], from: data) else {
+//            fatalError("Unexpectedly failed to decode dataObject.")
+//        }
+        
+        let dataObject = try? NSKeyedUnarchiver.unarchivedObject(ofClasses: [NIDiscoveryToken.self, NSString.self, Offer.self], from: data)
+        
+        print("dataObject", dataObject)
+        print(type(of: dataObject))
         
         if (dataObject is NIDiscoveryToken) {
             peerDidShareDiscoveryToken(peer: peer, token: dataObject as! NIDiscoveryToken)
         } else if (dataObject is NSString) {
-            print("received data", dataObject)
+            let data: String = dataObject as! String
+            let dataObjectArray = data.components(separatedBy: "@@")
+            print("received data", dataObjectArray)
+        } else if (dataObject is Offer) {
+            print("received offer", dataObject)
         }
         
 //        guard let discoveryToken = try? NSKeyedUnarchiver.unarchivedObject(ofClass: NIDiscoveryToken.self, from: data) else {
@@ -280,23 +289,27 @@ class ViewController: UIViewController, NISessionDelegate {
     private func sendOfferData(peer: NINearbyObject) {
         let distance = String(format: "%0.2f", peer.distance!)
 //        print("distance", distance)
+        var offer: Offer = Offer()
         var data = ""
         var sendData = false
         
         if distance == "0.70" {
-            data = "10% off for Pizza for Visa cardholders"
+            offer = Offer(text: "10% off for Pizza for Visa cardholders", imageName: "pizza")
+            data = "10% off for Pizza for Visa cardholders" + "@@" + "pizza"
             sendData = true
         } else if (distance == "0.50") {
-            data = "20% off for Pasta for Visa Platinum cardholders"
+            offer = Offer(text: "20% off for Pasta for Visa Platinum cardholders", imageName: "pizza")
+            data = "20% off for Pasta for Visa Platinum cardholders" + "@@" + "pizza"
             sendData = true
         } else if (distance == "0.30") {
-            data = "Free drinks for all Visa cardholders"
+            offer = Offer(text: "Free drinks for all Visa cardholders", imageName: "pizza")
+            data = "Free drinks for all Visa cardholders" + "@@" + "pizza"
             sendData = true
         }
         
         if sendData == true {
-            guard let encodedData = try?  NSKeyedArchiver.archivedData(withRootObject: data, requiringSecureCoding: true) else {
-                fatalError("Unexpectedly failed to encode discovery token.")
+            guard let encodedData = try?  NSKeyedArchiver.archivedData(withRootObject: data) else {
+                fatalError("Unexpectedly failed to send offer data.")
             }
             mpc?.sendDataToAllPeers(data: encodedData)
         }
