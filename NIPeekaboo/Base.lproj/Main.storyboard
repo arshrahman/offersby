@@ -2,7 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17132" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="zUT-oZ-xfH">
     <device id="retina6_5" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17105"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17105.1"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -147,14 +147,23 @@
                                     <constraint firstItem="6Fi-m6-v5C" firstAttribute="top" secondItem="dhT-vU-bME" secondAttribute="bottom" constant="4" id="yBs-YI-WBj"/>
                                 </constraints>
                             </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IRj-1W-Vnd" userLabel="Offer Label">
+                                <rect key="frame" x="57" y="606" width="300" height="74"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="kMg-o7-9m5"/>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="kMg-o7-9m5" firstAttribute="trailing" secondItem="Yss-3L-eeS" secondAttribute="trailing" constant="15" id="8rJ-s1-6if"/>
+                            <constraint firstItem="IRj-1W-Vnd" firstAttribute="leading" secondItem="bbA-Zz-zGx" secondAttribute="leading" id="CUt-La-oc7"/>
                             <constraint firstItem="kMg-o7-9m5" firstAttribute="trailing" secondItem="lis-It-tTF" secondAttribute="trailing" constant="26" id="D0k-dZ-7b2"/>
+                            <constraint firstItem="IRj-1W-Vnd" firstAttribute="trailing" secondItem="bbA-Zz-zGx" secondAttribute="trailing" id="KRZ-1K-Ef8"/>
                             <constraint firstItem="bbA-Zz-zGx" firstAttribute="centerX" secondItem="gcd-T3-AEb" secondAttribute="centerX" id="T3i-wI-KAA"/>
                             <constraint firstItem="lis-It-tTF" firstAttribute="leading" secondItem="kMg-o7-9m5" secondAttribute="leading" constant="26" id="Wdb-zz-Py3"/>
+                            <constraint firstItem="IRj-1W-Vnd" firstAttribute="top" secondItem="bbA-Zz-zGx" secondAttribute="bottom" constant="8" id="Wdc-BC-VlI"/>
                             <constraint firstItem="Yss-3L-eeS" firstAttribute="leading" secondItem="kMg-o7-9m5" secondAttribute="leading" constant="15" id="aXi-Lk-Mwy"/>
                             <constraint firstItem="lis-It-tTF" firstAttribute="top" secondItem="kMg-o7-9m5" secondAttribute="top" constant="88" id="nrI-r6-UfO"/>
                             <constraint firstItem="Yss-3L-eeS" firstAttribute="centerX" secondItem="gcd-T3-AEb" secondAttribute="centerX" id="s6k-0F-1zK"/>
@@ -176,11 +185,12 @@
                         <outlet property="detailRightArrow" destination="tWu-Mb-R6s" id="vNw-S6-vd8"/>
                         <outlet property="detailUpArrow" destination="gHd-Gd-HXh" id="6ej-c5-3Ow"/>
                         <outlet property="monkeyLabel" destination="bbA-Zz-zGx" id="pKe-TJ-qWA"/>
+                        <outlet property="offerLabel" destination="IRj-1W-Vnd" id="XLj-YO-o33"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="d0K-Yx-AW1" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="911.20000000000005" y="-129.31034482758622"/>
+            <point key="canvasLocation" x="910.14492753623199" y="-129.91071428571428"/>
         </scene>
         <!--Nearby Interaction Not Supported-->
         <scene sceneID="JZf-fR-OUe">

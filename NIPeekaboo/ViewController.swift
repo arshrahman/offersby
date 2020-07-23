@@ -24,6 +24,7 @@ class ViewController: UIViewController, NISessionDelegate {
     @IBOutlet weak var detailRightArrow: UIImageView!
     @IBOutlet weak var detailUpArrow: UIImageView!
     @IBOutlet weak var detailAngleInfoView: UIView!
+    @IBOutlet weak var offerLabel: UILabel!
 
     // MARK: - Distance and direction state
     let nearbyDistanceThreshold: Float = 0.5 // meters
@@ -120,7 +121,7 @@ class ViewController: UIViewController, NISessionDelegate {
         }
 
         currentDistanceDirectionState = .unknown
-
+        offerLabel.text = ""
         switch reason {
         case .peerEnded:
             // Peer stopped communicating, this session is finished, invalidate.
@@ -212,11 +213,9 @@ class ViewController: UIViewController, NISessionDelegate {
     }
 
     func dataReceivedHandler(data: Data, peer: MCPeerID) {
-//        guard let dataObject = try? NSKeyedUnarchiver.unarchivedObject(ofClasses: [NIDiscoveryToken.self, NSString.self, Offer.self], from: data) else {
-//            fatalError("Unexpectedly failed to decode dataObject.")
-//        }
-        
-        let dataObject = try? NSKeyedUnarchiver.unarchivedObject(ofClasses: [NIDiscoveryToken.self, NSString.self, Offer.self], from: data)
+        guard let dataObject = try? NSKeyedUnarchiver.unarchivedObject(ofClasses: [NIDiscoveryToken.self, NSString.self], from: data) else {
+            fatalError("Unexpectedly failed to decode dataObject.")
+        }
         
         print("dataObject", dataObject)
         print(type(of: dataObject))
@@ -227,14 +226,12 @@ class ViewController: UIViewController, NISessionDelegate {
             let data: String = dataObject as! String
             let dataObjectArray = data.components(separatedBy: "@@")
             print("received data", dataObjectArray)
-        } else if (dataObject is Offer) {
-            print("received offer", dataObject)
+            offerLabel.text = dataObjectArray[0]
+            let image = UIImage(named: dataObjectArray[1])
+            let imageView = UIImageView(image: image!)
+            imageView.frame = CGRect(x: 0, y: 0, width: 100, height: 200)
+            detailContainer.addSubview(imageView)
         }
-        
-//        guard let discoveryToken = try? NSKeyedUnarchiver.unarchivedObject(ofClass: NIDiscoveryToken.self, from: data) else {
-//            fatalError("Unexpectedly failed to encode discovery token.")
-//        }
-//        peerDidShareDiscoveryToken(peer: peer, token: discoveryToken)
     }
 
     func shareMyDiscoveryToken(token: NIDiscoveryToken) {
@@ -289,21 +286,17 @@ class ViewController: UIViewController, NISessionDelegate {
     private func sendOfferData(peer: NINearbyObject) {
         let distance = String(format: "%0.2f", peer.distance!)
 //        print("distance", distance)
-        var offer: Offer = Offer()
         var data = ""
         var sendData = false
         
-        if distance == "0.70" {
-            offer = Offer(text: "10% off for Pizza for Visa cardholders", imageName: "pizza")
+        if distance == "1.00" {
             data = "10% off for Pizza for Visa cardholders" + "@@" + "pizza"
             sendData = true
-        } else if (distance == "0.50") {
-            offer = Offer(text: "20% off for Pasta for Visa Platinum cardholders", imageName: "pizza")
-            data = "20% off for Pasta for Visa Platinum cardholders" + "@@" + "pizza"
+        } else if (distance == "0.70") {
+            data = "20% off for Pasta for Visa Platinum cardholders" + "@@" + "pasta"
             sendData = true
-        } else if (distance == "0.30") {
-            offer = Offer(text: "Free drinks for all Visa cardholders", imageName: "pizza")
-            data = "Free drinks for all Visa cardholders" + "@@" + "pizza"
+        } else if (distance == "0.50") {
+            data = "Free drinks for all Visa cardholders" + "@@" + "drinks"
             sendData = true
         }
         
