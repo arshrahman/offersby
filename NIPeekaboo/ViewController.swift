@@ -25,6 +25,7 @@ class ViewController: UIViewController, NISessionDelegate {
     @IBOutlet weak var detailUpArrow: UIImageView!
     @IBOutlet weak var detailAngleInfoView: UIView!
     @IBOutlet weak var offerLabel: UILabel!
+    @IBOutlet weak var offerImage: UIImageView!
 
     // MARK: - Distance and direction state
     let nearbyDistanceThreshold: Float = 0.5 // meters
@@ -50,7 +51,8 @@ class ViewController: UIViewController, NISessionDelegate {
         monkeyLabel.text = "🙈"
         centerInformationLabel.alpha = 1.0
         detailContainer.alpha = 0.0
-        
+        offerLabel.text = "Complimentary Lounge Access to Visa Cardholders"
+        offerImage.image = UIImage(named: "lounge")
         // Start the NISessions
         startup()
     }
@@ -227,6 +229,7 @@ class ViewController: UIViewController, NISessionDelegate {
             let dataObjectArray = data.components(separatedBy: "@@")
             print("received data", dataObjectArray)
             offerLabel.text = dataObjectArray[0]
+            offerImage.image = UIImage(named: dataObjectArray[1])
 //            let image = UIImage(named: dataObjectArray[1])
 //            let imageView = UIImageView(image: image!)
 //            imageView.frame = CGRect(x: 0, y: 0, width: 100, height: 200)
