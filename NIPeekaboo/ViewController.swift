@@ -26,7 +26,7 @@ class ViewController: UIViewController, NISessionDelegate {
     @IBOutlet weak var detailAngleInfoView: UIView!
 
     // MARK: - Distance and direction state
-    let nearbyDistanceThreshold: Float = 0.3 // meters
+    let nearbyDistanceThreshold: Float = 0.5 // meters
 
     enum DistanceDirectionState {
         case closeUpInFOV, notCloseUpInFOV, outOfFOV, unknown
@@ -100,6 +100,7 @@ class ViewController: UIViewController, NISessionDelegate {
         }
 
         // Update the the state and visualizations.
+        sendOfferData(peer: nearbyObjectUpdate)
         let nextState = getDistanceDirectionState(from: nearbyObjectUpdate)
         updateVisualization(from: currentDistanceDirectionState, to: nextState, with: nearbyObjectUpdate)
         currentDistanceDirectionState = nextState
@@ -198,6 +199,7 @@ class ViewController: UIViewController, NISessionDelegate {
 
         connectedPeer = peer
         peerDisplayName = peer.displayName
+        print("display name", peer)
 
         centerInformationLabel.text = peerDisplayName
         detailDeviceNameLabel.text = peerDisplayName
@@ -210,10 +212,20 @@ class ViewController: UIViewController, NISessionDelegate {
     }
 
     func dataReceivedHandler(data: Data, peer: MCPeerID) {
-        guard let discoveryToken = try? NSKeyedUnarchiver.unarchivedObject(ofClass: NIDiscoveryToken.self, from: data) else {
-            fatalError("Unexpectedly failed to encode discovery token.")
+        guard let dataObject = try? NSKeyedUnarchiver.unarchivedObject(ofClasses: [NIDiscoveryToken.self, NSString.self], from: data) else {
+            fatalError("Unexpectedly failed to decode dataObject.")
         }
-        peerDidShareDiscoveryToken(peer: peer, token: discoveryToken)
+        
+        if (dataObject is NIDiscoveryToken) {
+            peerDidShareDiscoveryToken(peer: peer, token: dataObject as! NIDiscoveryToken)
+        } else if (dataObject is NSString) {
+            print("received data", dataObject)
+        }
+        
+//        guard let discoveryToken = try? NSKeyedUnarchiver.unarchivedObject(ofClass: NIDiscoveryToken.self, from: data) else {
+//            fatalError("Unexpectedly failed to encode discovery token.")
+//        }
+//        peerDidShareDiscoveryToken(peer: peer, token: discoveryToken)
     }
 
     func shareMyDiscoveryToken(token: NIDiscoveryToken) {
@@ -264,7 +276,32 @@ class ViewController: UIViewController, NISessionDelegate {
 
         return .outOfFOV
     }
-
+    
+    private func sendOfferData(peer: NINearbyObject) {
+        let distance = String(format: "%0.2f", peer.distance!)
+//        print("distance", distance)
+        var data = ""
+        var sendData = false
+        
+        if distance == "0.70" {
+            data = "10% off for Pizza for Visa cardholders"
+            sendData = true
+        } else if (distance == "0.50") {
+            data = "20% off for Pasta for Visa Platinum cardholders"
+            sendData = true
+        } else if (distance == "0.30") {
+            data = "Free drinks for all Visa cardholders"
+            sendData = true
+        }
+        
+        if sendData == true {
+            guard let encodedData = try?  NSKeyedArchiver.archivedData(withRootObject: data, requiringSecureCoding: true) else {
+                fatalError("Unexpectedly failed to encode discovery token.")
+            }
+            mpc?.sendDataToAllPeers(data: encodedData)
+        }
+    }
+ 
     private func animate(from currentState: DistanceDirectionState, to nextState: DistanceDirectionState, with peer: NINearbyObject) {
         let azimuth = peer.direction.map(azimuth(from:))
         let elevation = peer.direction.map(elevation(from:))

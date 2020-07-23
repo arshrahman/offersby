@@ -107,6 +107,7 @@ class MPCSession: NSObject, MCSessionDelegate, MCNearbyServiceBrowserDelegate, M
     }
 
     internal func session(_ session: MCSession, didReceive data: Data, fromPeer peerID: MCPeerID) {
+                
         if let handler = peerDataHandler {
             DispatchQueue.main.async {
                 handler(data, peerID)
