@@ -43,7 +43,7 @@ class ViewController: UIViewController, NISessionDelegate {
     var connectedPeer: MCPeerID?
     var sharedTokenWithPeer = false
     var peerDisplayName: String?
-    var myPeerName = "Custome-X"
+    var myPeerName = "Pizza Hut"
 
     // MARK: - UI LifeCycle
     override func viewDidLoad() {
@@ -62,7 +62,7 @@ class ViewController: UIViewController, NISessionDelegate {
     }
     
     func applyMerchantModeSettings() {
-        myPeerName = "Hotel Visa"
+        myPeerName = "Consumer"
         offerImage.isHidden = true
         offerLabel.isHidden = true
     }
@@ -311,10 +311,10 @@ class ViewController: UIViewController, NISessionDelegate {
         if distance == "1.00" {
             data = "10% off for Pizza for Visa cardholders" + "@@" + "pizza"
             sendData = true
-        } else if (distance == "0.70") {
+        } else if (distance == "0.80") {
             data = "20% off for Pasta for Visa Platinum cardholders" + "@@" + "pasta"
             sendData = true
-        } else if (distance == "0.50") {
+        } else if (distance == "0.60") {
             data = "Free drinks for all Visa cardholders" + "@@" + "drinks"
             sendData = true
         }
@@ -337,7 +337,7 @@ class ViewController: UIViewController, NISessionDelegate {
         // If transitioning from unavailable state, bring the monkey and details into view,
         //  hide the center inforamtion label.
         if currentState == .unknown && nextState != .unknown {
-            monkeyLabel.alpha = 1.0
+            monkeyLabel.alpha = 0.0
             centerInformationLabel.alpha = 0.0
             detailContainer.alpha = 1.0
         }
